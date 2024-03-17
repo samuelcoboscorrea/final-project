@@ -1,0 +1,38 @@
+<template>
+  <div class="simple-scenario">
+    <div class="scene-container">
+      <a-scene embedded background="color: #ECECEC">
+        <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"
+            animation="startEvents: click; property: position;
+                from: -1 1.5 -3; to: -1 0.5 -3; dur: 1000"
+            test
+            hello-world
+            hello="event: click; message: Clicked!">
+        </a-box>
+        <a-box position="0 0.5 -1" rotation="0 45 0" color="#4CC3D9"
+            animation="startEvents: click; property: position;
+                from: -1 1.5 -3; to: -1 0.5 -3; dur: 1000"
+            hello="event: click; message: Clicked!">
+        </a-box>
+        <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"
+            animation="startEvents: click; property: scale;
+                from: 2 2 2; to: 1 1 1; dur: 1000"
+            hello="message: Hola">
+        </a-sphere>
+        <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+
+        <a-entity cursor="rayOrigin:mouse"></a-entity>
+      </a-scene>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { onMounted } from 'vue'
+console.log('enter111')
+onMounted(() => {
+  console.log('enter')
+})
+
+
+</script>

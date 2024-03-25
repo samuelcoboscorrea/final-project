@@ -22,3 +22,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### To upload dist to gh pages
+- git subtree push --prefix dist origin gh-pages

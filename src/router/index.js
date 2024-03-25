@@ -35,6 +35,9 @@ const manualRoutes = [
   {
     path: '/scenario',
     name: 'Scenario',
+    meta: {
+      description: 'Scenario simple list view'
+    },
     component: Scenario
   }
 ]

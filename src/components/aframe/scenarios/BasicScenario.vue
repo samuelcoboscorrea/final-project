@@ -62,20 +62,17 @@ const entityProps =  ref({
 })
 
 const boxProps =  ref({
-  material: {
-    color: 'red'
-  }
+  color: 'red'
 })
 /* END PROPERTIES */
 
 // functions
 
 const handleBoxClickEvent = () => {
-  console.log(boxProps.value.material)
-  console.log(boxProps.value.material.color === 'red')
-  if (boxProps.value.material.color === 'blue') {
+  console.log(boxProps.value.color)
+  if (boxProps.value.color === 'blue') {
     boxProps.value.color = 'red'
-  } else if (boxProps.value.material.color === 'red') {
+  } else if (boxProps.value.color === 'red') {
     boxProps.value.color = 'blue'
   }
 }

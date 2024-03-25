@@ -5,13 +5,16 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "aframe": "^1.5.0",
     "aframe-extras.grid": "^6.1.1",
     "aframe-sun-sky": "^3.0.4",
     "core-js": "^3.6.5",
+    "gh-pages": "^6.1.1",
     "semistandard": "*",
     "three": "^0.162.0",
     "three-fbx-loader": "^1.0.3",

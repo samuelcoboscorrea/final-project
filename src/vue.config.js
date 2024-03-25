@@ -14,5 +14,6 @@ module.exports = {
   },
   globals: {
     AFRAME: 'readonly'
-  }
+  },
+  publicPath: process.env.NODE_ENV === "production" ? "/final-project/" : "/"
 }  

@@ -1,0 +1,20 @@
+<script setup>
+
+const emit = defineEmits(['onClickEvent'])
+
+const props = defineProps({
+  aprops: Object
+})
+
+const handleClickEvent = () => {
+  console.log('clicked')
+  emit('onClickEvent')
+}
+
+</script>
+
+<template>
+  <a-sphere v-bind="props.aprops" @click="handleClickEvent">
+    <slot></slot>
+  </a-sphere>
+</template>

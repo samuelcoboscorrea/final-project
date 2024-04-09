@@ -4,12 +4,15 @@
       <Scene :aprops="basicSceneProps">
         <Sky :aprops="skyProps" />
         <Entity id="camera" :aprops="cameraEntityProps">
-          <Camera />
+          <Camera>
+            <ControlPanel @obbcollisionstarted="handleCollisionButton" @obbcollisionended="handleCollisionButton" @pinchedmoved="handlePointUp" @pinchedstarted="handlePointUp" :handsData="text"/>
+          </Camera>
         </Entity>
 
-        <Grid :aprops="gridProps" />
+        <Grid id="grid" :aprops="gridProps">
+          <Tatami/>
+        </Grid>
 
-        <ControlPanel @obbcollisionstarted="handleCollisionButton" @obbcollisionended="handleCollisionButton" @pinchedmoved="handlePointUp" @pinchedstarted="handlePointUp" :handsData="text"/>
 
         <a-text :value="text">
 
@@ -35,6 +38,7 @@ import Sky from '../entities/basic/Sky.vue'
 import Grid from '../entities/basic/Grid.vue'
 import Camera from '../entities/utils/Camera.vue'
 import ControlPanel from '../entities/custom/ControlPanel.vue'
+import Tatami from '../entities/custom/Tatami.vue'
 import { ref, onMounted, provide } from 'vue'
 
 const leftHand = ref(null);

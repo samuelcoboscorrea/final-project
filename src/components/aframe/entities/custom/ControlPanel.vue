@@ -28,7 +28,7 @@ const handleClickEvent = () => {
 /* entities props */
 
 const menuProps = ref({
-  position: '0 1.3 -0.525',
+  position: '0 0 -0.9525',
   rotation: '-20 0 0',
   grabbable: ''
 });

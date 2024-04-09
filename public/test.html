@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-sphere
+        position="0 1.25 -5"
+        radius="1.25"
+        color="#EF2D5E"
+        obb-collider
+      ></a-sphere>
+      <a-entity></a-entity>
+      <a-entity id="leftHand" hand-tracking-controls="hand: left;" obb-collider></a-entity>
+      <a-entity id="rightHand" hand-tracking-controls="hand: right;" obb-collider></a-entity>
+      <a-entity>
+        <a-entity
+          gltf-model="https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"
+          position="0 1.25 -5"
+          scale="0.01 0.01 0.01"
+          obb-collider
+          animation="property:position; to:3 1.25 -5; loop:true; dur: 2000; easing:linear; dir: alternate"
+        ></a-entity>
+      </a-entity>
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+    <script>
+      document.body.addEventListener("obbcollisionstarted", function (e) {
+        console.log(e.detail); 
+      });
+    </script>
+  </body>
+</html>

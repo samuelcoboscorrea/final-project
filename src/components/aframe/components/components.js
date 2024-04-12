@@ -20,7 +20,12 @@ AFRAME.registerComponent('hello-world', {
 
 AFRAME.registerComponent('pressable', {
   schema: {
-    pressDistance: { default: 0.06 }
+    pressDistance: { default: 0.06 },
+    animationFinished: { type: 'boolean' }
+  },
+
+  update: function (oldData) {
+    console.log(oldData)
   },
 
   init: function () {
@@ -37,7 +42,7 @@ AFRAME.registerComponent('pressable', {
       handEl = handEls[i];
       distance = this.calculateFingerDistance(handEl.components['hand-tracking-controls'].indexTipPosition);
       if (distance < this.data.pressDistance) {
-        if (!this.pressed) { this.el.emit('pressedstarted'); }
+        if (!this.pressed && this.data.animationFinished) { this.el.emit('pressedstarted'); }
         this.pressed = true;
         return;
       }

@@ -5,21 +5,20 @@
         <Sky :aprops="skyProps" />
         <Entity id="camera" :aprops="cameraEntityProps">
           <Camera>
-            <ControlPanel @obbcollisionstarted="handleCollisionButton" @obbcollisionended="handleCollisionButton" @pinchedmoved="handlePointUp" @pinchedstarted="handlePointUp" :handsData="text"/>
           </Camera>
         </Entity>
-
+        <ControlPanel @obbcollisionstarted="handleCollisionButton" @obbcollisionended="handleCollisionButton" @pinchedmoved="handlePointUp" @pinchedstarted="handlePointUp" :handsData="text"/>
+        
         <Grid id="grid" :aprops="gridProps">
           <Tatami/>
         </Grid>
-
 
         <a-text :value="text">
 
         </a-text>
 
-        <Entity :aprops="{ id: 'leftHand', 'hand-tracking-controls': { hand: 'left' }, 'obb-collider': '' }"/>
-        <Entity :aprops="{ id: 'rightHand', 'hand-tracking-controls': { hand: 'right' }, 'obb-collider': '' }"
+        <Entity :aprops="{ id: 'leftHand', 'hand-tracking-controls': { hand: 'left' }, 'hand-tracking-grab-controls': { hand: 'left' }, 'obb-collider': '' }"/>
+        <Entity :aprops="{ id: 'rightHand', 'hand-tracking-controls': { hand: 'right' }, 'hand-tracking-grab-controls': { hand: 'right' }, 'obb-collider': '' }"
           @pinchstarted="handlePinchStarted"
           @pinchended="handlePinchEnded"
           @pinchmoved="handlePinchMoved"

@@ -1,7 +1,6 @@
 <template>
-  <Entity @pressedstarted="handleClickEvent" @click="handleClickEvent" v-if="initialized" :aprops="buttonProps">
+  <Entity @animationbegin="handleAnimationState" @animationcomplete="handleAnimationState" @pressedstarted="handleClickEvent" @click="handleClickEvent" v-if="initialized" :aprops="buttonProps">
     <Entity :aprops="labelProps"/>
-    <!-- <a-text :value="label"></a-text> -->
   </Entity>
 </template>
 
@@ -25,13 +24,14 @@ export default {
     const initialized = ref(false)
     const label = ref(props.text)
     const count = ref(0)
+    const animationFinished = ref(true)
     const animationObject = ref(null)
     const positionAnimation = {
       x: props.position.x,
       y: props.position.y,
       z: props.position.z - 0.03,
     }
-    const buttonProps = ref({
+    const buttonProps = computed(() => ({
       id: props.id,
       position: props.position,
       geometry: {
@@ -40,7 +40,9 @@ export default {
         height: 0.05,
         depth: 0.04,
       },
-      pressable: '',
+      pressable: {
+        animationFinished: animationFinished.value
+      },
       material: {
         color: props.color
       },
@@ -57,26 +59,37 @@ export default {
         startEvents: 'click, pressedstarted',
         enabled: true
       }
-    });
+    }));
     const labelProps = computed(() => ({
       position: '0 0 0.02',
       text: {
-        value: label.value, // Accedemos al valor actual de label
+        value: label.value,
         color: 'white',
         align: 'center'
       }
     }));
     
     const handleClickEvent = (event) => {
-      buttonProps.value.material = Object.assign({}, buttonProps.value.material, { color: 'blue' });
+      buttonProps.value.animation.startEvents = ''
+    }
+
+    const handleAnimationState = (event) => {
+      console.log(event)
+      // buttonProps.value.pressable = Object.assign({}, buttonProps.value.pressable, { animationFinished: true });
+      animationFinished.value = !animationFinished.value
+      console.log('animationFinished.value', animationFinished.value)
       // emit('customEvent')
     }
+
+    const textLabel = computed(() => {
+      return animationFinished.value
+    })
 
     onMounted(() => {
       initialized.value = true
     })
 
-    return { initialized, label, count, buttonProps, labelProps, handleClickEvent }
+    return { initialized, label, count, buttonProps, labelProps, handleClickEvent, handleAnimationState, textLabel }
   }
 }
 </script>

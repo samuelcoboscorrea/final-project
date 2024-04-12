@@ -1,10 +1,11 @@
 <template>
   <Entity :aprops="menuProps">
-    <Entity :aprops="backgroundMenuProps" />
-    <!-- <Slider :data="sliderData" @sliderchanged="console.log(event)" :handsData="props.handsData"/> -->
-    <ButtonLabel id="testid" text="sphere" width="0.12" color="red" :position="{ x: -0.15, y: 0, z: 0 }"/>
-    <ButtonLabel id="testid2" text="box" width="0.12" color="red" :position="{ x: 0, y: 0, z: 0 }"/>
-    <ButtonLabel id="testid3" text="torus" width="0.12" color="red" :position="{ x: 0.15, y: 0, z: 0 }"/>
+    <Entity :aprops="backgroundMenuProps" >
+      <!-- <Slider :data="sliderData" @sliderchanged="console.log(event)" :handsData="props.handsData"/> -->
+      <ButtonLabel id="sphere-item" text="sphere" width="0.12" color="red" :position="{ x: -0.15, y: 0, z: 0.025 }"/>
+      <ButtonLabel id="box-item" text="box" width="0.12" color="red" :position="{ x: 0, y: 0, z: 0.025 }"/>
+      <ButtonLabel id="cyl-item" text="cyl" width="0.12" color="red" :position="{ x: 0.15, y: 0, z: 0.025 }"/>
+    </Entity>
   </Entity>
 </template>
 
@@ -28,8 +29,8 @@ const handleClickEvent = () => {
 /* entities props */
 
 const menuProps = ref({
-  position: '0 0 -0.9525',
-  rotation: '-20 0 0',
+  position: '0 1.5 -0.5',
+  rotation: '-20 -15 0',
   grabbable: ''
 });
 
@@ -41,7 +42,8 @@ const backgroundMenuProps = ref({
     depth: 0.01
   },
   material: {
-    color: '#65a2e0'
+    color: '#65a2e0',
+    roughnessMap: 'url(https://aframe.io/sample-assets/assets/images/bricks/brick_roughness.jpg)'
   },
   position: '0 0 -0.025'
 });

@@ -70,14 +70,12 @@ export default {
     }));
     
     const handleClickEvent = (event) => {
-      buttonProps.value.animation.startEvents = ''
+      emit('selectItem')
     }
 
     const handleAnimationState = (event) => {
-      console.log(event)
       // buttonProps.value.pressable = Object.assign({}, buttonProps.value.pressable, { animationFinished: true });
       animationFinished.value = !animationFinished.value
-      console.log('animationFinished.value', animationFinished.value)
       // emit('customEvent')
     }
 

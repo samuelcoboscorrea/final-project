@@ -2,9 +2,7 @@
   <Entity :aprops="menuProps">
     <Entity :aprops="backgroundMenuProps" >
       <!-- <Slider :data="sliderData" @sliderchanged="console.log(event)" :handsData="props.handsData"/> -->
-      <ButtonLabel id="sphere-item" text="sphere" width="0.12" color="red" :position="{ x: -0.15, y: 0, z: 0.025 }"/>
-      <ButtonLabel id="box-item" text="box" width="0.12" color="red" :position="{ x: 0, y: 0, z: 0.025 }"/>
-      <ButtonLabel id="cyl-item" text="cyl" width="0.12" color="red" :position="{ x: 0.15, y: 0, z: 0.025 }"/>
+      <ButtonLabel v-for="(buttonLabel, index) in buttonLabels" :key="index" v-bind="buttonLabel" @selectItem="handleSelectItem(buttonLabel)"/>
     </Entity>
   </Entity>
 </template>
@@ -15,12 +13,51 @@ import Slider from './Slider.vue'
 import ButtonLabel from '@/components/aframe/entities/custom/ButtonLabel.vue'
 import { ref } from 'vue'
 
-const emit = defineEmits(['onClickEvent'])
+const emit = defineEmits(['onClickEvent', 'selectItem'])
 
 const props = defineProps({
   data: Object,
   handsData: String,
 })
+
+const buttonLabels = ref([
+  {
+    id: 'sphere-item',
+    type: 'sphere',
+    text: 'sphere',
+    width: 0.12,
+    color: 'red',
+    position: {
+      x: -0.15,
+      y: 0,
+      z: 0.025
+    }
+  },
+    {
+    id: 'box-item',
+    type: 'box',
+    text: 'box',
+    width: 0.12,
+    color: 'red',
+    position: {
+      x: 0,
+      y: 0,
+      z: 0.025
+    }
+  },
+  {
+    id: 'cyl-item',
+    type: 'cylinder',
+    text: 'cyl',
+    width: 0.12,
+    color: 'red',
+    position: {
+      x: 0.15,
+      y: 0,
+      z: 0.025
+    }
+  }
+])
 
 const handleClickEvent = () => {
   emit('onClickEvent')
@@ -76,5 +113,10 @@ const sliderData = ref({
     'color-change': ''
   }
 });
+
+const handleSelectItem = (item) => {
+  console.log(item)
+  emit('selectItem', { type: item.type })
+}
 
 </script>

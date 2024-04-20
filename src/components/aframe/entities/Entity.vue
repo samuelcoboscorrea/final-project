@@ -11,7 +11,6 @@ watch(props, (newValue, oldValue) => {
 });
 
 const handleClickEvent = () => {
-  console.log('clicked')
   emit('onClickEvent')
 }
 

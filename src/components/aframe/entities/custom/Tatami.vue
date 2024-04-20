@@ -1,28 +1,32 @@
 <template>
   <Box @click="handleClickEvent" :aprops="tatamiProps">
     <slot></slot>
+    <Entity v-for="(item, index) in items" :key="index" v-bind="item"/>
   </Box>
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Box from '@/components/aframe/entities/basic/Box.vue'
-
+import Entity from '@/components/aframe/entities/Entity.vue'
 
 export default {
   name: 'Tatami',
   components: {
-    Box
+    Box,
+    Entity
   },
   props: {
     id: String,
     text: String,
     width: String,
     color: String,
-    position: Object
+    position: Object,
+    items: Array
   },
   setup(props, { emit }) {
     const label = ref(null)
+    const items = ref(props.items)
     const tatamiProps = ref({
       position: "0 4 0",
       rotation: "0 0 0",
@@ -42,6 +46,12 @@ export default {
 
     onMounted(() => {
     })
+
+    watch(items, (newValue, oldValue) => {
+      // Función que se ejecuta cuando cambia el valor de myVar
+      console.log('Nuevo valor:', newValue);
+      console.log('Valor anterior:', oldValue);
+    });
 
     return { label, tatamiProps, handleClickEvent }
   }

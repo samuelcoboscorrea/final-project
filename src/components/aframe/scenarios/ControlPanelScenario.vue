@@ -7,15 +7,11 @@
           <Camera>
           </Camera>
         </Entity>
-        <ControlPanel @obbcollisionstarted="handleCollisionButton" @obbcollisionended="handleCollisionButton" @pinchedmoved="handlePointUp" @pinchedstarted="handlePointUp" :handsData="text"/>
+        <ControlPanel @selectItem="handleSelectItem" :handsData="text"/>
         
         <Grid id="grid" :aprops="gridProps">
-          <Tatami/>
+          <Tatami :items="items"/>
         </Grid>
-
-        <a-text :value="text">
-
-        </a-text>
 
         <Entity :aprops="{ id: 'leftHand', 'hand-tracking-controls': { hand: 'left' }, 'hand-tracking-grab-controls': { hand: 'left' }, 'obb-collider': '' }"/>
         <Entity :aprops="{ id: 'rightHand', 'hand-tracking-controls': { hand: 'right' }, 'hand-tracking-grab-controls': { hand: 'right' }, 'obb-collider': '' }"
@@ -38,18 +34,16 @@ import Grid from '../entities/basic/Grid.vue'
 import Camera from '../entities/utils/Camera.vue'
 import ControlPanel from '../entities/custom/ControlPanel.vue'
 import Tatami from '../entities/custom/Tatami.vue'
-import { ref, onMounted, provide } from 'vue'
-
-const leftHand = ref(null);
-
-provide('leftHand', leftHand);
+import { ref, onMounted, computed } from 'vue'
 
 const count = ref(0)
-const handleCollisionButton = (event) => {
-  console.log(event)
-  count.value += 1
-  text.value = 'asdf ' + count.value.toString()
-}
+
+const items = ref([])
+
+const getItems = computed(() => {
+  console.log(items)
+  return items.value
+});
 
 const basicSceneProps =  ref({
   position: '0 0 0',
@@ -90,7 +84,6 @@ const cameraEntityProps =  ref({
   position: '0 0 0'
 })
 
-
 const handlePinchMoved = (event) => {
   console.log(event)
   text.value = JSON.stringify(event.detail.position)
@@ -103,5 +96,29 @@ const handlePinchEnded = (event) => {
   console.log(event)
   text.value = JSON.stringify(event.detail.position)
 }
+
+const createSimpleItem = (type) => {
+  return {
+    position: '0 -1.6 1.4',
+    geometry: {
+      radius: 0.3,
+      primitive: type,
+      width: 0.2,
+      height: 0.5,
+      depth: 0.5,
+    },
+    material: {
+      color: 'red'
+    },
+    grabbable: ''
+  }
+}
+
+const handleSelectItem = (item) => {
+  console.log(item)
+  items.value.push(createSimpleItem(item.type))
+  console.log(items)
+}
+
 
 </script>

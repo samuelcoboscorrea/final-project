@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "aframe": "^1.5.0",
+    "aframe-extras": "^7.4.0",
     "aframe-extras.grid": "^6.1.1",
     "aframe-sun-sky": "^3.0.4",
     "core-js": "^3.6.5",
     "gh-pages": "^6.1.1",
     "semistandard": "*",
+    "super-hands": "^3.0.4",
     "three": "^0.162.0",
     "three-fbx-loader": "^1.0.3",
     "vue": "^3.0.0",

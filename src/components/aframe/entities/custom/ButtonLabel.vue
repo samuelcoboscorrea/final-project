@@ -85,6 +85,7 @@ export default {
 
     onMounted(() => {
       initialized.value = true
+      console.log(labelProps)
     })
 
     return { initialized, label, count, buttonProps, labelProps, handleClickEvent, handleAnimationState, textLabel }

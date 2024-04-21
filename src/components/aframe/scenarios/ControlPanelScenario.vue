@@ -6,19 +6,20 @@
         <Entity id="camera" :aprops="cameraEntityProps">
           <Camera>
           </Camera>
+          <Entity :aprops="leftHandProps"/>
+          <Entity :aprops="rightHandProps"
+            @pinchstarted="handlePinchStarted"
+            @pinchended="handlePinchEnded"
+            @pinchmoved="handlePinchMoved"
+          />
         </Entity>
+        
         <ControlPanel @selectItem="handleSelectItem" :handsData="text"/>
         
         <Grid id="grid" :aprops="gridProps">
           <Tatami :items="items"/>
         </Grid>
 
-        <Entity :aprops="{ id: 'leftHand', 'hand-tracking-controls': { hand: 'left' }, 'hand-tracking-grab-controls': { hand: 'left' }, 'obb-collider': '' }"/>
-        <Entity :aprops="{ id: 'rightHand', 'hand-tracking-controls': { hand: 'right' }, 'hand-tracking-grab-controls': { hand: 'right' }, 'obb-collider': '' }"
-          @pinchstarted="handlePinchStarted"
-          @pinchended="handlePinchEnded"
-          @pinchmoved="handlePinchMoved"
-        />
       </Scene>
     </div>
   </div>
@@ -39,6 +40,28 @@ import { ref, onMounted, computed } from 'vue'
 const count = ref(0)
 
 const items = ref([])
+
+const leftHandProps = ref({
+  id: 'leftHand',
+  'hand-tracking-grab-controls': {
+    hand: 'left'
+  },
+  'obb-collider': '',
+  'hand-tracking-extras': '',
+  'hand-teleport': {
+    rig: '#camera',
+    origin: 'a-camera'
+  }
+})
+
+const rightHandProps = ref({
+  id: 'rightHand',
+  'hand-tracking-grab-controls': {
+    hand: 'right'
+  },
+  'hand-tracking-extras': '',
+  'obb-collider': ''
+})
 
 const getItems = computed(() => {
   console.log(items)
@@ -81,7 +104,6 @@ const skyProps = ref({
 });
 
 const cameraEntityProps =  ref({
-  position: '0 0 0'
 })
 
 const handlePinchMoved = (event) => {

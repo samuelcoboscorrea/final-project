@@ -61,4 +61,4 @@ AFRAME.registerComponent('pressable', {
 
     return worldPosition.distanceTo(fingerPosition);
   }
-});
+})

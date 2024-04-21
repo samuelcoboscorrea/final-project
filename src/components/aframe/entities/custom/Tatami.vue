@@ -32,7 +32,7 @@ export default {
       rotation: "0 0 0",
       width: 5,
       height: 5,
-      dept: 0.2,
+      depth: 0.2,
       color: "#7BC8A4",
       material: {
         src: 'url(https://i.imgur.com/mYmmbrp.jpeg)'

@@ -2,14 +2,17 @@
   <div class="basic-scenario">
     <div class="scene-container">
       <a-scene background="color: #EEEEE" xr-mode-ui="XRMode: xr">
-        <a-box grabbable position="-0.1 0.8 -0.3" rotation="0 45 0" color="#4CC3D9"
-            depth="0.1" height="0.1" width="0.1"></a-box>
-        <a-sphere grabbable position="0 0.8 -0.3" radius="0.2" color="#EF2D5E"></a-sphere>
-        <a-cylinder grabbable position="0.1 0.8 -0.3" radius="0.2" height="0.2" color="#FFC65D"></a-cylinder>
-        <a-plane position="0 0 -0.7" rotation="-90 0 0" width="1" height="1" color="#7BC8A4"></a-plane>
-
-        <a-entity id="leftHand" hand-tracking-grab-controls="hand: left;"></a-entity>
-        <a-entity id="rightHand" hand-tracking-grab-controls="hand: right;"></a-entity>
+        <a-entity id="rig">
+          <a-camera></a-camera>
+          <!-- left hand can teleport, and drag the world position -->
+          <a-entity hand-tracking-controls="hand: left" hand-tracking-extras
+          hand-teleport="rig: #rig; origin: a-camera" drag-move="rig: #rig; speed: 5">
+          </a-entity>
+        
+          <!-- right hand can rotate the world by dragging -->
+          <a-entity hand-tracking-controls="hand: right" hand-tracking-extras drag-rotate="rig: #rig">
+          </a-entity>
+        </a-entity>
 
       </a-scene>
 

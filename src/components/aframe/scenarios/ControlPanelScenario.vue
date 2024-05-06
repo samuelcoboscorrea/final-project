@@ -6,19 +6,19 @@
         <Entity id="camera" :aprops="cameraEntityProps">
           <Camera>
           </Camera>
-          <Entity :aprops="leftHandProps"/>
-          <Entity :aprops="rightHandProps"
-            @pinchstarted="handlePinchStarted"
-            @pinchended="handlePinchEnded"
-            @pinchmoved="handlePinchMoved"
-          />
         </Entity>
-        
-        <ControlPanel @selectItem="handleSelectItem" :handsData="text"/>
         
         <Grid id="grid" :aprops="gridProps">
           <Tatami :items="items"/>
         </Grid>
+
+        <Entity :aprops="{ id: 'miContenedor' }"/>
+
+        <Entity id="left-hand" :aprops="leftHandProps"/>
+          
+        <Entity id="right-hand" @handdown="handleHandDown" @handup="handleHandUp" :aprops="rightHandProps">
+          <ControlPanel :visible="showControlPanel" :position="controlPanelPosition" @selectItem="handleSelectItem" :handsData="text"/>
+        </Entity>
 
       </Scene>
     </div>
@@ -40,6 +40,12 @@ import { ref, onMounted, computed } from 'vue'
 const count = ref(0)
 
 const items = ref([])
+const showControlPanel = ref(true)
+const controlPanelPosition = ref({
+  x: 0,
+  y: 0,
+  z: 0
+})
 
 const leftHandProps = ref({
   id: 'leftHand',
@@ -47,11 +53,7 @@ const leftHandProps = ref({
     hand: 'left'
   },
   'obb-collider': '',
-  'hand-tracking-extras': '',
-  'hand-teleport': {
-    rig: '#camera',
-    origin: 'a-camera'
-  }
+  'hand-positions': '',
 })
 
 const rightHandProps = ref({
@@ -59,8 +61,12 @@ const rightHandProps = ref({
   'hand-tracking-grab-controls': {
     hand: 'right'
   },
-  'hand-tracking-extras': '',
-  'obb-collider': ''
+  'hand-pose-detector': '',
+  'obb-collider': '',
+  'hand-down-detector': {
+    hand: 'right',
+    fingerTipJoint: 'index-finger-tip'
+  }
 })
 
 const getItems = computed(() => {
@@ -106,19 +112,6 @@ const skyProps = ref({
 const cameraEntityProps =  ref({
 })
 
-const handlePinchMoved = (event) => {
-  console.log(event)
-  text.value = JSON.stringify(event.detail.position)
-}
-const handlePinchStarted = (event) => {
-  console.log(event)
-  text.value = JSON.stringify(event.detail.position)
-}
-const handlePinchEnded = (event) => {
-  console.log(event)
-  text.value = JSON.stringify(event.detail.position)
-}
-
 const createSimpleItem = (type) => {
   return {
     position: '0 -1.6 1.4',
@@ -137,10 +130,28 @@ const createSimpleItem = (type) => {
 }
 
 const handleSelectItem = (item) => {
-  console.log(item)
+  // console.log(item)
   items.value.push(createSimpleItem(item.type))
-  console.log(items)
+  // console.log(items)
 }
 
+const controlEvent = (event) => {
+  console.log(event)
+}
+
+const handleHandDown = (event) => {
+  showControlPanel.value = false
+}
+
+const handleHandUp = (event) => {
+  controlPanelPosition.value = {
+    x: event.detail.x,
+    y: event.detail.y + 0.2,
+    z: event.detail.z
+  };
+  showControlPanel.value = true
+  // console.log(event)
+  // console.log(controlPanelPosition.value)
+}
 
 </script>

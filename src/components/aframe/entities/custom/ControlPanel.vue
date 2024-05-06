@@ -1,5 +1,5 @@
 <template>
-  <Entity :aprops="menuProps">
+  <Entity id="control-panel" :aprops="menuProps">
     <Entity :aprops="backgroundMenuProps" >
       <!-- <Slider :data="sliderData" @sliderchanged="console.log(event)" :handsData="props.handsData"/> -->
       <ButtonLabel v-for="(buttonLabel, index) in buttonLabels" :key="index" v-bind="buttonLabel" @selectItem="handleSelectItem(buttonLabel)"/>
@@ -11,14 +11,26 @@
 import Entity from '../Entity.vue'
 import Slider from './Slider.vue'
 import ButtonLabel from '@/components/aframe/entities/custom/ButtonLabel.vue'
-import { ref } from 'vue'
+import { ref, onMounted, reactive, toRef, watch } from 'vue'
 
 const emit = defineEmits(['onClickEvent', 'selectItem'])
 
 const props = defineProps({
   data: Object,
   handsData: String,
+  position: Object
 })
+
+const position = toRef(props, 'position');
+
+onMounted(() => {
+  console.log(props)
+})
+
+watch(position, (newValue, oldValue) => {
+  // console.log('Nuevo valor de position:', newValue);
+  // console.log('Valor anterior de position:', oldValue);
+});
 
 const buttonLabels = ref([
   {
@@ -65,8 +77,8 @@ const handleClickEvent = () => {
 
 /* entities props */
 
-const menuProps = ref({
-  position: '0 1.5 -0.5',
+const menuProps = reactive({
+  position: position,
   rotation: '-20 -15 0',
   grabbable: ''
 });

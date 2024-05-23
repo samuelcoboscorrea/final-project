@@ -14,9 +14,10 @@
 
         <Entity :aprops="{ id: 'miContenedor' }"/>
 
-        <Entity id="left-hand" :aprops="leftHandProps"/>
+        <Entity id="left-hand" @pinchstarted="controlEvent" :aprops="leftHandProps"/>
           
-        <Entity id="right-hand" @handdown="handleHandDown" @handup="handleHandUp" :aprops="rightHandProps">
+        <Entity id="right-hand" @position="controlEvent" @handdown="handleHandDown" @handup="handleHandUp" :aprops="rightHandProps">
+          <a-text value="text" position="0 0 -0.1"></a-text>
           <ControlPanel :visible="showControlPanel" :position="controlPanelPosition" @selectItem="handleSelectItem" :handsData="text"/>
         </Entity>
 
@@ -38,6 +39,8 @@ import Tatami from '../entities/custom/Tatami.vue'
 import { ref, onMounted, computed } from 'vue'
 
 const count = ref(0)
+
+const emit = defineEmits(['save-pose'])
 
 const items = ref([])
 const showControlPanel = ref(true)
@@ -63,10 +66,12 @@ const rightHandProps = ref({
   },
   'hand-pose-detector': '',
   'obb-collider': '',
+  'detect-pose': '',
   'hand-down-detector': {
     hand: 'right',
     fingerTipJoint: 'index-finger-tip'
-  }
+  },
+  // 'hand-positions': ''
 })
 
 const getItems = computed(() => {
@@ -84,11 +89,10 @@ const basicSceneProps =  ref({
   },
   'obb-collider': {
     showColliders: false
-  }
+  },
 })
 
 onMounted(() => {
-
 })
 
 const text = ref('hola que tal')
@@ -110,6 +114,8 @@ const skyProps = ref({
 });
 
 const cameraEntityProps =  ref({
+  'handy-controls': "right:#right-gltf;materialOverride:right;",
+  'material': "color:gold;metalness:1;roughness:0;"
 })
 
 const createSimpleItem = (type) => {
@@ -130,13 +136,12 @@ const createSimpleItem = (type) => {
 }
 
 const handleSelectItem = (item) => {
-  // console.log(item)
   items.value.push(createSimpleItem(item.type))
   // console.log(items)
 }
 
 const controlEvent = (event) => {
-  console.log(event)
+  // console.log(event)
 }
 
 const handleHandDown = (event) => {
@@ -152,6 +157,10 @@ const handleHandUp = (event) => {
   showControlPanel.value = true
   // console.log(event)
   // console.log(controlPanelPosition.value)
+}
+
+const handleClickEvent = (event) => {
+  emit('save-pose')
 }
 
 </script>

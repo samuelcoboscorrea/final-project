@@ -1,7 +1,7 @@
 <template>
   <div class="basic-scenario">
     <div class="scene-container">
-      <Scene :aprops="basicSceneProps">
+      <Scene :id="'my-scene'" :aprops="basicSceneProps">
         <Sky :aprops="skyProps" />
         <Entity id="camera" :aprops="cameraEntityProps">
           <Camera>
@@ -12,13 +12,12 @@
           <Tatami :items="items"/>
         </Grid>
 
-        <Entity :aprops="{ id: 'miContenedor' }"/>
+        <SavePosePanel :id="'saver-panel'" @selectItem="handleSavePose" :position="'0.2 1.4 -0.5'" :handsData="text"/>
 
         <Entity id="left-hand" @pinchstarted="controlEvent" :aprops="leftHandProps"/>
           
         <Entity id="right-hand" @position="controlEvent" @handdown="handleHandDown" @handup="handleHandUp" :aprops="rightHandProps">
-          <a-text value="text" position="0 0 -0.1"></a-text>
-          <ControlPanel :visible="showControlPanel" :position="controlPanelPosition" @selectItem="handleSelectItem" :handsData="text"/>
+          <ControlPanel :id="'control-panel'" :visible="showControlPanel" :position="controlPanelPosition" @selectItem="handleSelectItem" :handsData="text"/>
         </Entity>
 
       </Scene>
@@ -35,6 +34,7 @@ import Sky from '../entities/basic/Sky.vue'
 import Grid from '../entities/basic/Grid.vue'
 import Camera from '../entities/utils/Camera.vue'
 import ControlPanel from '../entities/custom/ControlPanel.vue'
+import SavePosePanel from '../entities/custom/SavePosePanel.vue'
 import Tatami from '../entities/custom/Tatami.vue'
 import { ref, onMounted, computed } from 'vue'
 
@@ -66,11 +66,13 @@ const rightHandProps = ref({
   },
   'hand-pose-detector': '',
   'obb-collider': '',
-  'detect-pose': '',
-  'hand-down-detector': {
-    hand: 'right',
-    fingerTipJoint: 'index-finger-tip'
+  'detect-pose': {
+    poses: []
   },
+  // 'hand-down-detector': {
+  //   hand: 'right',
+  //   fingerTipJoint: 'index-finger-tip'
+  // },
   // 'hand-positions': ''
 })
 
@@ -159,8 +161,12 @@ const handleHandUp = (event) => {
   // console.log(controlPanelPosition.value)
 }
 
-const handleClickEvent = (event) => {
-  emit('save-pose')
+const handleSavePose = () => {
+  const scene = document.querySelector('#my-scene');
+  if (scene) {
+    const event = new Event('save-pose');
+    scene.dispatchEvent(event);
+  }
 }
 
 </script>

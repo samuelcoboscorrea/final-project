@@ -26,28 +26,26 @@ var JOINTS = [
   'pinky-finger-tip'
 ];
 
-
-
 AFRAME.registerComponent('detect-pose', {
   schema: {
     hand: { default: 'left' },
     fingerTipJoint: { default: 'index-finger-tip' },
     distancesToWrist: { default: [] },
     poses: { default: [] },
+    actualPose: { default: null }
   },
 
   init: function () {
-    this.data.poses = []
+    this.el.sceneEl.addEventListener('save-pose', () => this.savePose('test'))
 
-    console.log('test')
-
-    this.el.addEventListener("save-pose", function (event) {
-      this.savePose('test')
-      console.log(poses)
-    });
+     this.poseTextEl = document.createElement('a-text');
+     this.poseTextEl.setAttribute('position', '0 2 -2');
+     this.poseTextEl.setAttribute('value', 'text');
+     this.el.sceneEl.appendChild(this.poseTextEl);
   },
 
   update: function () {
+    console.log(this.data.poses)
   },
 
   onModelLoaded: function () {
@@ -95,33 +93,62 @@ AFRAME.registerComponent('detect-pose', {
       distancesToWrist.push(distance);
     }
     this.data.distancesToWrist = distancesToWrist
+    // console.log(this.data.distancetos)
 
-    /////////// test position
-
-    const predefinedDistances = [0, 0.05003999670769802, 0.08199392112682366, 0.11350772040970421, 0.1358602836697121, 0.04323191092500442, 0.09920182653629199, 0.1304798492671457, 0.13458083133266602, 0.13534030366510408, 0.0371214371177703, 0.09602604425886353, 0.1384702365952246, 0.16233918017128773, 0.18422542772295086, 0.03854864248225906, 0.09099998462973066, 0.12941405847727738, 0.15339170383067327, 0.1752855050132736, 0.04202382139108134, 0.08663143689638457, 0.11783891102334616, 0.13697082496889712, 0.15789242148065816];
-
-
-    const margin = 0.01;
-    const isSimilar = this.compareDistances(this.data.distancesToWrist, predefinedDistances, margin);
-
-    if (isSimilar) {
-      console.log("La pose actual es similar a la pose predefinida.");
-    } else {
-      // console.log("La pose actual es diferente de la pose predefinida.");
-    }
+    this.checkPose()
 
   },
 
   savePose(name) {
     // actual position
+    console.log('test')
     var newPose = {
-      name: name,
+      name: name + this.data.poses.length.toString(),
       distances: this.data.distancesToWrist,
     }
-    this.data.poses.push(asdf)
+    this.data.poses.push(newPose)
+    console.log(this.data.poses)
+
+    this.createElementScene(newPose)
+  },
+
+  createElementScene (newPose) {
+    // Crear un nuevo elemento para la lista de poses
+    let poseListEl = document.querySelector('#pose-list');
+    if (!poseListEl) {
+      poseListEl = document.createElement('a-entity');
+      poseListEl.setAttribute('id', 'pose-list');
+      this.el.sceneEl.appendChild(poseListEl);
+    }
+
+    // Crear un nuevo elemento para la nueva pose
+    const poseEl = document.createElement('a-text');
+    poseEl.setAttribute('value', `Pose: ${newPose.name}`);
+    poseEl.setAttribute('position', `0 ${1 + (this.data.poses.length * 0.5)} -0.3`);
+
+    // Agregar el nuevo elemento a la lista de poses
+    poseListEl.appendChild(poseEl);
   },
 
   checkPose() {
+    console.log('entra')
+    console.log(this.data.poses)
+    for (let i = 0; i < this.data.poses.length; i++) {
+      var poseDistance = this.data.poses[i].distances
+
+      const margin = 0.01;
+      console.log(this.data.distancesToWrist)
+      console.log(poseDistance)
+      const isSimilar = this.compareDistances(this.data.distancesToWrist, poseDistance, margin);
+  
+      if (isSimilar) {
+        this.data.actualPose = this.data.poses[i].name
+        console.log("actual pose is ", this.data.actualPose);
+        this.poseTextEl.setAttribute('value', `Actual Pose: ${this.data.actualPose}`);
+        break;
+      }
+    }
+
 
   },
 

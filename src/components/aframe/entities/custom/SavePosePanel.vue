@@ -1,5 +1,5 @@
 <template>
-  <Entity id="control-panel" :aprops="menuProps">
+  <Entity id="saver-panel" :aprops="menuProps">
     <Entity :aprops="backgroundMenuProps" >
       <!-- <Slider :data="sliderData" @sliderchanged="console.log(event)" :handsData="props.handsData"/> -->
       <ButtonLabel v-for="(buttonLabel, index) in buttonLabels" :key="index" v-bind="buttonLabel" @selectItem="handleSelectItem(buttonLabel)"/>
@@ -34,37 +34,13 @@ watch(position, (newValue, oldValue) => {
 
 const buttonLabels = ref([
   {
-    id: 'sphere-item',
-    type: 'sphere',
-    text: 'sphere',
-    width: 0.12,
-    color: 'red',
-    position: {
-      x: -0.15,
-      y: 0,
-      z: 0.025
-    }
-  },
-    {
     id: 'box-item',
     type: 'box',
-    text: 'box',
+    text: 'save',
     width: 0.12,
     color: 'red',
     position: {
       x: 0,
-      y: 0,
-      z: 0.025
-    }
-  },
-  {
-    id: 'cyl-item',
-    type: 'cylinder',
-    text: 'cyl',
-    width: 0.12,
-    color: 'red',
-    position: {
-      x: 0.15,
       y: 0,
       z: 0.025
     }

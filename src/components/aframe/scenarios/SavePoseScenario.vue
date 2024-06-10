@@ -16,11 +16,20 @@
         <Grid id="grid" :aprops="gridProps">
           <Tatami :items="items"/>
         </Grid>
+
+        <a-entity gltf-model="url(/stick_magic.glb)" position="1.5 0.7 1" rotation="0 45 0"
+            scale="2 2 2"></a-entity>
+
+        <a-entity scale="2 2 2" id="raytracing" position="-0.5 1 -0.4" height="0.2" width="0.2" grabbable raycaster="showLine: true"> </a-entity>
+
+        <!-- <a-entity id="magic-wand" magic-wand></a-entity> -->
+
+        <Keyboard id="keyboard-entity" :keyboardProps="keyboardProps"/>
         
         <SavePosePanel :id="'save-panel'" @selectItem="handleSavePose" :handsData="text"/>
 
-        <Entity id="left-hand" :aprops="leftHandProps"/>
-        <Entity id="right-hand" @newpose="handleNewPoseAdded" :aprops="rightHandProps"/>
+        <Entity @obbcollisionstarted="handleNewPoseAdded" :aprops="leftHandProps"/>
+        <Entity @newpose="handleNewPoseAdded" :aprops="rightHandProps"/>
 
       </Scene>
     </div>
@@ -36,6 +45,7 @@ import Assets from '../entities/basic/Assets.vue'
 import Camera from '../entities/utils/Camera.vue'
 import SavePosePanel from '../entities/custom/SavePosePanel.vue'
 import Tatami from '../entities/custom/Tatami.vue'
+import Keyboard from '../entities/custom/Keyboard.vue'
 import localTexture from '@/assets/Tiles_051_4K_basecolor.png'
 import { ref, onMounted, computed } from 'vue'
 
@@ -52,7 +62,8 @@ export default {
     Grid,
     Camera,
     SavePosePanel,
-    Tatami
+    Tatami,
+    Keyboard
   },
   setup(props, { emit }) {
     const items = ref([])
@@ -64,12 +75,16 @@ export default {
     })
     const poses = ref([])
 
+    const keyboardProps = ref({
+      position: { x: 0, y: 1.076, z: -0.5 }
+    })
+
     const leftHandProps = ref({
       id: 'leftHand',
       'hand-tracking-grab-controls': {
         hand: 'left'
       },
-      'obb-collider': '',
+      'obb-collider': 'showColliders: true',
       'hand-positions': '',
     })
 
@@ -147,6 +162,7 @@ export default {
       skyProps,
       cameraEntityProps,
       localTexture,
+      keyboardProps,
       handleSavePose,
       handleNewPoseAdded
     };

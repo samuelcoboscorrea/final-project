@@ -38,10 +38,10 @@ AFRAME.registerComponent('detect-pose', {
   init: function () {
     this.el.sceneEl.addEventListener('save-pose', () => this.savePose('test'))
 
-     this.poseTextEl = document.createElement('a-text');
-     this.poseTextEl.setAttribute('position', '0 2 -2');
-     this.poseTextEl.setAttribute('value', 'text');
-     this.el.sceneEl.appendChild(this.poseTextEl);
+    this.poseTextEl = document.createElement('a-text');
+    this.poseTextEl.setAttribute('position', '0 2 -2');
+    this.poseTextEl.setAttribute('value', 'text');
+    this.el.sceneEl.appendChild(this.poseTextEl);
   },
 
   update: function () {
@@ -131,14 +131,10 @@ AFRAME.registerComponent('detect-pose', {
   },
 
   checkPose() {
-    console.log('entra')
-    console.log(this.data.poses)
     for (let i = 0; i < this.data.poses.length; i++) {
       var poseDistance = this.data.poses[i].distances
 
       const margin = 0.01;
-      console.log(this.data.distancesToWrist)
-      console.log(poseDistance)
       const isSimilar = this.compareDistances(this.data.distancesToWrist, poseDistance, margin);
   
       if (isSimilar) {

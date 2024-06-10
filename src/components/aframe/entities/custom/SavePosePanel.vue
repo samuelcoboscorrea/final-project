@@ -1,109 +1,99 @@
 <template>
   <Entity id="saver-panel" :aprops="menuProps">
-    <Entity :aprops="backgroundMenuProps" >
-      <!-- <Slider :data="sliderData" @sliderchanged="console.log(event)" :handsData="props.handsData"/> -->
-      <ButtonLabel v-for="(buttonLabel, index) in buttonLabels" :key="index" v-bind="buttonLabel" @selectItem="handleSelectItem(buttonLabel)"/>
-    </Entity>
+    <Box :aprops="columnProps" >
+      <ButtonEnter v-bind="buttonEnter" @selectItem="handleSelectItem(buttonEnter)"/>
+    </Box>
   </Entity>
 </template>
 
-<script setup>
+<script>
 import Entity from '../Entity.vue'
-import Slider from './Slider.vue'
-import ButtonLabel from '@/components/aframe/entities/custom/ButtonLabel.vue'
-import { ref, onMounted, reactive, toRef, watch } from 'vue'
+import Box from '@/components/aframe/entities/basic/Box.vue'
+import ButtonEnter from '@/components/aframe/entities/custom/ButtonEnter.vue'
+import { ref, onMounted, reactive } from 'vue'
 
-const emit = defineEmits(['onClickEvent', 'selectItem'])
+export default {
+  name: 'SavePosePanel',
+  components: {
+    Entity,
+    Box,
+    ButtonEnter
+  },
+  props: {
+    data: Object,
+    handsData: String
+  },
+  setup(props, { emit }) {
+    const position = '0.2 1.4 -0.5'
 
-const props = defineProps({
-  data: Object,
-  handsData: String,
-  position: Object
-})
+    /* entities props */
+    const buttonEnter = ref({
+      id: 'box-item',
+      type: 'box',
+      text: 'save',
+      width: 0.10,
+      color: 'red',
+      position: {
+        x: 0,
+        y: 0.5,
+        z: 0
+      },
+    })
 
-const position = toRef(props, 'position');
+    const menuProps = reactive({
+      // position: position,
+      // rotation: '-20 -15 0',
+      // grabbable: ''
+    });
 
-onMounted(() => {
-  console.log(props)
-})
+    const backgroundMenuProps = ref({
+      geometry: {
+        primitive: 'box',
+        width: 0.6,
+        height: 0.40,
+        depth: 0.01
+      },
+      material: {
+        color: '#65a2e0',
+        roughnessMap: 'url(https://aframe.io/sample-assets/assets/images/bricks/brick_roughness.jpg)'
+      },
+      position: '0 1 0'
+    });
 
-watch(position, (newValue, oldValue) => {
-  // console.log('Nuevo valor de position:', newValue);
-  // console.log('Valor anterior de position:', oldValue);
-});
+    const columnProps = ref({
+      geometry: {
+        primitive: 'cylinder',
+        radius: 0.07,
+        height: 1,
+        depth: 0.1
+      },
+      material: {
+        src: 'url(https://aframe.io/sample-assets/assets/images/bricks/brick_roughness.jpg)', // Textura
+        color: '#FF5733', // Color vibrante
+        repeat: '2 2', // Repetir la textura
+        roughness: 0.5, // Ajustar la rugosidad
+        metalness: 0.3 // Ajustar la metalidad para reflejos
+      },
+      position: '0 0.5 0'
+    });
 
-const buttonLabels = ref([
-  {
-    id: 'box-item',
-    type: 'box',
-    text: 'save',
-    width: 0.12,
-    color: 'red',
-    position: {
-      x: 0,
-      y: 0,
-      z: 0.025
+    const handleSelectItem = (item) => {
+      emit('selectItem', { type: item.type })
+    }
+
+    const handleClickEvent = () => {
+      emit('onClickEvent')
+    }
+
+    onMounted(() => {
+      console.log(props)
+    })
+
+    return {
+      buttonEnter, menuProps, backgroundMenuProps, columnProps,
+      handleClickEvent,
+      handleSelectItem
     }
   }
-])
-
-const handleClickEvent = () => {
-  emit('onClickEvent')
 }
-
-/* entities props */
-
-const menuProps = reactive({
-  position: position,
-  rotation: '-20 -15 0',
-  grabbable: ''
-});
-
-const backgroundMenuProps = ref({
-  geometry: {
-    primitive: 'box',
-    width: 0.6,
-    height: 0.40,
-    depth: 0.01
-  },
-  material: {
-    color: '#65a2e0',
-    roughnessMap: 'url(https://aframe.io/sample-assets/assets/images/bricks/brick_roughness.jpg)'
-  },
-  position: '0 0 -0.025'
-});
-
-const sliderData = ref({
-  trackSlideProps: {
-    geometry: {
-      primitive: 'box',
-      height: 0.01,
-      width: 0.5,
-      depth: 0.01
-    },
-    material: {
-      color: 'white'
-    }
-  },
-  pickSlideProps: {
-    geometry: {
-      primitive: 'cylinder',
-      radius: 0.02,
-      height: 0.05
-    },
-    material: {
-      color: '#3a50c5'
-    },
-    pinchable: {
-      pinchDistance: 0.05
-    },
-    rotation: { x: 90, y: 0, z: 0 },
-    'color-change': ''
-  }
-});
-
-const handleSelectItem = (item) => {
-  emit('selectItem', { type: item.type })
-}
-
 </script>

@@ -7,7 +7,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <a-grid v-bind="props.aprops">
+  <a-ocean v-bind="props.aprops">
     <slot></slot>
-  </a-grid>
+  </a-ocean>
 </template>

@@ -14,7 +14,7 @@
         </Entity>
         
         <Grid id="grid" :aprops="gridProps">
-          <!-- <Tatami :items="items"/> -->
+          <Tatami :items="items"/>
         </Grid>
 
         <a-entity id="magic-wand" gltf-model="url(/stick_magic.glb)" scale="0.2 0.2 0.2" position="-0.5 1 -0.4" height="0.2" width="0.2" grabbable raycaster="showLine: true; direction: 0 -0.5 -1" rotation="27 0 0"> </a-entity>

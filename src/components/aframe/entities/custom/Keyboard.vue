@@ -21,7 +21,7 @@ export default {
     const keyboardAttributes = ref({
       id: "keyboard",
       'super-keyboard': {
-        hand: "#raytracing",
+        hand: "#magic-wand",
         imagePath: "..",
         multipleInputs: true
       },

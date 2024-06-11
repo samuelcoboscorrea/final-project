@@ -14,22 +14,17 @@
         </Entity>
         
         <Grid id="grid" :aprops="gridProps">
-          <Tatami :items="items"/>
+          <!-- <Tatami :items="items"/> -->
         </Grid>
 
-        <a-entity gltf-model="url(/stick_magic.glb)" position="1.5 0.7 1" rotation="0 45 0"
-            scale="2 2 2"></a-entity>
-
-        <a-entity scale="2 2 2" id="raytracing" position="-0.5 1 -0.4" height="0.2" width="0.2" grabbable raycaster="showLine: true"> </a-entity>
-
-        <!-- <a-entity id="magic-wand" magic-wand></a-entity> -->
-
+        <a-entity id="magic-wand" gltf-model="url(/stick_magic.glb)" scale="0.2 0.2 0.2" position="-0.5 1 -0.4" height="0.2" width="0.2" grabbable raycaster="showLine: true; direction: 0 -0.5 -1" rotation="27 0 0"> </a-entity>
+        
         <Keyboard id="keyboard-entity" :keyboardProps="keyboardProps"/>
         
         <SavePosePanel :id="'save-panel'" @selectItem="handleSavePose" :handsData="text"/>
 
         <Entity @obbcollisionstarted="handleNewPoseAdded" :aprops="leftHandProps"/>
-        <Entity @newpose="handleNewPoseAdded" :aprops="rightHandProps"/>
+        <Entity @pinchstarted="inputKeyboard" @newpose="handleNewPoseAdded" :aprops="rightHandProps"/>
 
       </Scene>
     </div>
@@ -153,6 +148,10 @@ export default {
       console.log(newPose)
     }
 
+    const inputKeyboard = (newPose) => {
+      console.log(newPose)
+    }
+
     return {
       leftHandProps,
       rightHandProps,
@@ -164,7 +163,8 @@ export default {
       localTexture,
       keyboardProps,
       handleSavePose,
-      handleNewPoseAdded
+      handleNewPoseAdded,
+      inputKeyboard
     };
   }
 };

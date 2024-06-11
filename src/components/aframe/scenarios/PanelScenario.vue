@@ -14,7 +14,7 @@
           />
         </Entity>
         
-        <ControlPanel @selectItem="handleSelectItem" :handsData="text"/>
+        <ControlPanel @selectItem="handleSelectItem" :position="'0 1.5 -0.5'" :handsData="text"/>
         
         <Grid id="grid" :aprops="gridProps">
           <Tatami :items="items"/>

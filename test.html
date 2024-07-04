@@ -1,33 +1,78 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handy-work/build/handy-controls.min.js"></script>
   </head>
   <body>
     <a-scene>
-      <a-sphere
-        position="0 1.25 -5"
-        radius="1.25"
-        color="#EF2D5E"
-        obb-collider
-      ></a-sphere>
-      <a-entity></a-entity>
-      <a-entity id="leftHand" hand-tracking-controls="hand: left;" obb-collider></a-entity>
-      <a-entity id="rightHand" hand-tracking-controls="hand: right;" obb-collider></a-entity>
-      <a-entity>
-        <a-entity
-          gltf-model="https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"
-          position="0 1.25 -5"
-          scale="0.01 0.01 0.01"
-          obb-collider
-          animation="property:position; to:3 1.25 -5; loop:true; dur: 2000; easing:linear; dir: alternate"
-        ></a-entity>
-      </a-entity>
+      <!-- Agrega los elementos existentes -->
+      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
+
+      <a-assets>
+        <a-asset-item id="stick" src="/stick_magic.glb"></a-asset-item>
+      </a-assets>
+
+      <a-entity gltf-model="#stick" position="1.5 0.7 -1" rotation="0 45 0"
+          scale="2 2 2"></a-entity>
+
+      <a-entity
+        id="cameraRig"
+        simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:0;exclude:.navmesh-hole;"
+        movement-controls="speed:0.15;camera:#head;"
+        position="-1 0 1" rotation="0 45 0" origin-on-ar-start
+      >
+        <!-- Agrega los controles de handy-controls -->
+        <a-entity handy-controls="materialOverride:right;" material="color:gold;metalness:1;roughness:0;">
+
+          <!-- Agrega los elementos relacionados con los controles -->
+          <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:blue" data-none="screen-0"></a-torus>
+          <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:green" data-none="screen-1"></a-torus>
+          <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:red" data-none="screen-2"></a-torus>
+
+          <!-- Otros elementos -->
+          <a-gltf-model src="#watch-gltf" data-left="wrist" position="-1000 0 0">
+            <a-sphere radius="0.02" position="0 0.02 0" sphere-collider="radius:0.02;objects:[data-right$=-tip];" exit-on="hitend" visible="false"></a-sphere>
+          </a-gltf-model>
+          <a-entity data-left="ring-finger-phalanx-proximal">
+            <a-torus position="0 0 -0.03" radius="0.008" radius-tubular="0.001" scale="1 1 1.5" material="color:gold;metalness:1;roughness:0;"></a-torus>
+          </a-entity>
+
+          <a-entity data-right="index-finger-tip" mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
+          <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
+
+          <a-entity data-right="ray" mixin="blink" blink-controls>
+            <a-entity position="0 0 -0.22" class="pose-label" text="value: Hello World; align: center;"></a-entity>
+          </a-entity>
+          <a-entity data-left="ray" mixin="blink" blink-controls>
+            <a-entity position="0 0 -0.22" class="pose-label" text="value: Hello World; align: center;"></a-entity>
+          </a-entity>
+
+          <a-entity id="right-magnet" data-right="grip" data-magnet=".magnet-right:not([data-no-magnet]),.magnet:not([data-no-magnet])" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;"></a-entity>
+          <a-entity id="left-magnet" data-left="grip"  data-magnet=".magnet-left:not([data-no-magnet]),.magnet:not([data-no-magnet])"  grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;"></a-entity>
+
+          <a-sphere id="right-no-magnet" data-right="grip" data-no-magnet radius="0.01" color="red"></a-sphere>
+          <a-sphere id="left-no-magnet" data-left="grip" data-no-magnet radius="0.01" color="red"></a-sphere>
+
+          <a-sphere data-right="index-finger-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-right="middle-finger-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-right="ring-finger-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-right="pinky-finger-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-right="thumb-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-left="index-finger-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-left="middle-finger-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-left="ring-finger-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-left="pinky-finger-tip" radius="0.01" visible="false"></a-sphere>
+          <a-sphere data-left="thumb-tip" radius="0.01" visible="false"></a-sphere>
+        </a-entity>
+      </a-entity>
+
+      <!-- Añade un a-sky y un a-grid -->
+      <a-sky color="#ECECEC"></a-sky>
+      <a-grid></a-grid>
     </a-scene>
-    <script>
-      document.body.addEventListener("obbcollisionstarted", function (e) {
-        console.log(e.detail); 
-      });
-    </script>
   </body>
 </html>

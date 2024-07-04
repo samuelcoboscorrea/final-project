@@ -1,24 +1,24 @@
 <template>
   <div class="basic-scenario">
     <div class="scene-container">
-      <Scene :id="'my-scene'" :aprops="basicSceneProps">
+      <Scene :aprops="basicSceneProps">
         <Sky :aprops="skyProps" />
         <Entity id="camera" :aprops="cameraEntityProps">
           <Camera>
           </Camera>
+          <Entity :aprops="leftHandProps"/>
+          <Entity :aprops="rightHandProps"
+            @pinchstarted="handlePinchStarted"
+            @pinchended="handlePinchEnded"
+            @pinchmoved="handlePinchMoved"
+          />
         </Entity>
+        
+        <ControlPanel @selectItem="handleSelectItem" :position="'0 1.5 -0.5'" :handsData="text"/>
         
         <Grid id="grid" :aprops="gridProps">
           <Tatami :items="items"/>
         </Grid>
-
-        <SavePosePanel :id="'saver-panel'" @selectItem="handleSavePose" :position="'0.2 1.4 -0.5'" :handsData="text"/>
-
-        <Entity id="left-hand" @pinchstarted="controlEvent" :aprops="leftHandProps"/>
-          
-        <Entity id="right-hand" @position="controlEvent" @handdown="handleHandDown" @handup="handleHandUp" :aprops="rightHandProps">
-          <ControlPanel :id="'control-panel'" :visible="showControlPanel" :position="controlPanelPosition" @selectItem="handleSelectItem" :handsData="text"/>
-        </Entity>
 
       </Scene>
     </div>
@@ -34,21 +34,12 @@ import Sky from '../entities/basic/Sky.vue'
 import Grid from '../entities/basic/Grid.vue'
 import Camera from '../entities/utils/Camera.vue'
 import ControlPanel from '../entities/custom/ControlPanel.vue'
-import SavePosePanel from '../entities/custom/SavePosePanel.vue'
 import Tatami from '../entities/custom/Tatami.vue'
 import { ref, onMounted, computed } from 'vue'
 
 const count = ref(0)
 
-const emit = defineEmits(['save-pose'])
-
 const items = ref([])
-const showControlPanel = ref(true)
-const controlPanelPosition = ref({
-  x: 0,
-  y: 0,
-  z: 0
-})
 
 const leftHandProps = ref({
   id: 'leftHand',
@@ -56,7 +47,11 @@ const leftHandProps = ref({
     hand: 'left'
   },
   'obb-collider': '',
-  'hand-positions': '',
+  'hand-tracking-extras': '',
+  'hand-teleport': {
+    rig: '#camera',
+    origin: 'a-camera'
+  }
 })
 
 const rightHandProps = ref({
@@ -64,16 +59,8 @@ const rightHandProps = ref({
   'hand-tracking-grab-controls': {
     hand: 'right'
   },
-  'hand-pose-detector': '',
-  'obb-collider': '',
-  'detect-pose': {
-    poses: []
-  },
-  // 'hand-down-detector': {
-  //   hand: 'right',
-  //   fingerTipJoint: 'index-finger-tip'
-  // },
-  // 'hand-positions': ''
+  'hand-tracking-extras': '',
+  'obb-collider': ''
 })
 
 const getItems = computed(() => {
@@ -91,10 +78,11 @@ const basicSceneProps =  ref({
   },
   'obb-collider': {
     showColliders: false
-  },
+  }
 })
 
 onMounted(() => {
+
 })
 
 const text = ref('hola que tal')
@@ -116,9 +104,20 @@ const skyProps = ref({
 });
 
 const cameraEntityProps =  ref({
-  'handy-controls': "right:#right-gltf;materialOverride:right;",
-  'material': "color:gold;metalness:1;roughness:0;"
 })
+
+const handlePinchMoved = (event) => {
+  console.log(event)
+  text.value = JSON.stringify(event.detail.position)
+}
+const handlePinchStarted = (event) => {
+  console.log(event)
+  text.value = JSON.stringify(event.detail.position)
+}
+const handlePinchEnded = (event) => {
+  console.log(event)
+  text.value = JSON.stringify(event.detail.position)
+}
 
 const createSimpleItem = (type) => {
   return {
@@ -138,35 +137,10 @@ const createSimpleItem = (type) => {
 }
 
 const handleSelectItem = (item) => {
+  console.log(item)
   items.value.push(createSimpleItem(item.type))
-  // console.log(items)
+  console.log(items)
 }
 
-const controlEvent = (event) => {
-  // console.log(event)
-}
-
-const handleHandDown = (event) => {
-  showControlPanel.value = false
-}
-
-const handleHandUp = (event) => {
-  controlPanelPosition.value = {
-    x: event.detail.x,
-    y: event.detail.y + 0.2,
-    z: event.detail.z
-  };
-  showControlPanel.value = true
-  // console.log(event)
-  // console.log(controlPanelPosition.value)
-}
-
-const handleSavePose = () => {
-  const scene = document.querySelector('#my-scene');
-  if (scene) {
-    const event = new Event('save-pose');
-    scene.dispatchEvent(event);
-  }
-}
 
 </script>

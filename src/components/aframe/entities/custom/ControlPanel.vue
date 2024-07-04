@@ -127,7 +127,6 @@ const sliderData = ref({
 });
 
 const handleSelectItem = (item) => {
-  console.log(item)
   emit('selectItem', { type: item.type })
 }
 

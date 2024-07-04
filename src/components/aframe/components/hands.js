@@ -1,3 +1,5 @@
+import { poses as posesLeft  } from './handy/Handy-poses-left.js'
+
 var JOINTS = [
   'wrist',
   'thumb-metacarpal',
@@ -26,6 +28,8 @@ var JOINTS = [
   'pinky-finger-tip'
 ];
 
+
+
 AFRAME.registerComponent('hand-down-detector', {
   schema: {
     hand: { default: 'left' }, // Mano a detectar (derecha o izquierda)
@@ -41,6 +45,93 @@ AFRAME.registerComponent('hand-down-detector', {
   onModelLoaded: function () {
   },
 
+  searchPose: function (controller) {
+    let pose = []
+    JOINTS.forEach((jointName, index) => {
+      var jointIndex = index * 16; // Índice de inicio de la matriz de la articulación actual en jointPoses
+      
+      // var jointPose = new THREE.Matrix4().fromArray(jointPoses, jointIndex);
+  
+      var jointPosition = new THREE.Vector3();
+      var jointRotation = new THREE.Quaternion();
+      var jointPose = new THREE.Matrix4();
+
+      if (jointName === 'wrist') {
+        jointRotation.setFromRotationMatrix(jointPose.fromArray(controller.jointPoses, index * 16));
+        pose.push(jointRotation)
+      } else {
+        jointPosition.setFromMatrixPosition(jointPose.fromArray(controller.jointPoses, index * 16));
+        pose.push(jointPosition)
+      }
+    });
+    return pose;
+  },
+
+  readLivePoseData: function(){
+
+		const 
+		hand  = this,
+		wrist = hand.joints[ 'wrist' ],
+		jointPositions    = [],
+		digitTipPositions = [],
+
+		preparePosition = function( joint ){
+
+			const 
+			jointMatrix = joint.matrix
+			.clone()
+			.premultiply( 
+
+				// new THREE.Matrix4().copy( wrist.matrixWorld.invert() )
+				wrist.matrixWorld.clone().invert()
+			)
+
+			
+			//  Extract the X, Y, Z positions from the resulting matrix
+			//  and return this as a flat Array
+			//  with distances rounded to the nearest millimeter.
+			
+			return [ 
+
+				Math.round( jointMatrix.elements[ 12 ] * 1000 ),
+				Math.round( jointMatrix.elements[ 13 ] * 1000 ),
+				Math.round( jointMatrix.elements[ 14 ] * 1000 )
+			]
+		},
+
+		headPosition = 
+			wrist !== undefined && !wrist.position.equals( Handy.VECTOR3_ZERO )
+			? preparePosition( this.el.sceneEl.camera )
+			: null,
+		headRotation = 
+			headPosition === null
+			? null
+			: this.el.sceneEl.camera.quaternion.toArray()
+		
+		Object.values( hand.joints )
+		.forEach( function( joint, i ){
+			if( joint !== undefined &&
+				joint.position !== undefined &&
+				joint.position.equals( Handy.VECTOR3_ZERO ) === false ){
+
+				const preparedPosition = preparePosition( joint )
+				jointPositions[ i ] = preparedPosition
+
+				if( Handy.isDigitTipIndex( i )){
+
+					digitTipPositions.push( preparedPosition )
+				}
+			}
+		})
+
+		return { 
+			headPosition,
+			headRotation,
+			jointPositions,
+			digitTipPositions
+		}
+	},
+
   tick: function () {
     // Lógica para determinar si la mano está boca arriba.
     // Por ejemplo, podrías verificar si el dedo índice está apuntando hacia arriba.
@@ -51,6 +142,27 @@ AFRAME.registerComponent('hand-down-detector', {
     if (controller.indexTipPosition.y > 0.1) {
       // console.log('la mano esta boca arriba');
     }
+
+    // TEST FUNCTION
+
+    var trackedController = this.el.components['tracked-controls'];
+    if (!trackedController) { return; }
+    const hand = trackedController.controller.hand
+    // console.log(trackedController.controller.hand)
+    const wristJoint = trackedController.controller.hand.get("wrist");
+    const indexFingerTipJoint2 = trackedController.controller.hand.get("index-finger-tip");
+
+    for (const [joint, jointSpace] of trackedController.controller.hand) {
+      // console.log(joint);
+      // console.log(jointSpace);
+    }
+
+    const frame = this.el.sceneEl.frame;
+    const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
+    
+    const indexFingerTipJoint = hand.get("index-finger-tip");
+    const jointpose2 = frame.getJointPose(indexFingerTipJoint, referenceSpace); // XRJointPose
+
 
     var WRIST_INDEX = 0;
     var THUMB_TIP_INDEX = 4;
@@ -68,16 +180,10 @@ AFRAME.registerComponent('hand-down-detector', {
 
     var jointRadi = controller.jointRadii[WRIST_INDEX]
 
-    
-
     if (-0.02 <= wristRotation.y <= 0.02) {
       this.el.emit('handdown', controller.indexTipPosition);
     } else if (wristRotation.y > 0.08) {
-      console.log(wristRotation.y)
-      console.log(controller)
-      console.log(controller.skinnedMesh.parent.rotation)
-      console.log(controller.skinnedMesh.parent.quaternion)
-      console.log(jointRadi)
+      var pose = this.searchPose(controller)
       this.el.emit('handup', controller.indexTipPosition);
     } else {
       this.el.emit('handdown', controller.indexTipPosition);
@@ -99,17 +205,33 @@ AFRAME.registerComponent('hand-positions', {
   },
 
   tick: function () {
-    var self = this;
-    var joints = ['wrist', 'thumb-metacarpal', 'thumb-phalanx-proximal', 'thumb-phalanx-distal', 'thumb-tip', 'index-finger-metacarpal', 'index-finger-phalanx-proximal', 'index-finger-phalanx-intermediate', 'index-finger-phalanx-distal', 'index-finger-tip', 'middle-finger-metacarpal', 'middle-finger-phalanx-proximal', 'middle-finger-phalanx-intermediate', 'middle-finger-phalanx-distal', 'middle-finger-tip', 'ring-finger-metacarpal', 'ring-finger-phalanx-proximal', 'ring-finger-phalanx-intermediate', 'ring-finger-phalanx-distal', 'ring-finger-tip', 'pinky-finger-metacarpal', 'pinky-finger-phalanx-proximal', 'pinky-finger-phalanx-intermediate', 'pinky-finger-phalanx-distal', 'pinky-finger-tip'];
+    var controller = this.el.components['hand-tracking-controls'];
+    if (!controller) { return; }
+    // var pose = this.searchPose(controller);
+    // console.log(pose)
+    this.el.emit('position', controller.bones);
+  },
 
-    // Iterar sobre cada articulación
-    joints.forEach(function (jointName) {
-      // Obtener la posición de la articulación
-      var jointPosition = self.getJointPosition(jointName);
+  searchPose: function (controller) {
+    let pose = []
+    JOINTS.forEach((jointName, index) => {
+      var jointIndex = index * 16; // Índice de inicio de la matriz de la articulación actual en jointPoses
+      
+      // var jointPose = new THREE.Matrix4().fromArray(jointPoses, jointIndex);
+  
+      var jointPosition = new THREE.Vector3();
+      var jointRotation = new THREE.Quaternion();
+      var jointPose = new THREE.Matrix4();
 
-      // Crear o actualizar el texto correspondiente a la posición de la articulación
-      self.updateText(jointName, jointPosition);
+      if (jointName === 'wrist') {
+        jointRotation.setFromRotationMatrix(jointPose.fromArray(controller.jointPoses, index * 16));
+        pose.push(jointRotation)
+      } else {
+        jointPosition.setFromMatrixPosition(jointPose.fromArray(controller.jointPoses, index * 16));
+        pose.push(jointPosition)
+      }
     });
+    return pose;
   },
 
   getJointPosition: function (jointName) {

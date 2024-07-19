@@ -5,7 +5,6 @@
         <Sky :aprops="skyProps" />
 
         <Assets>
-          <!-- Cargar la imagen local -->
           <img id="localTexture" :src="localTexture">
         </Assets>
 

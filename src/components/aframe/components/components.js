@@ -14,7 +14,6 @@ AFRAME.registerComponent('hello-world', {
   pause: function () { },
   play: function () { },
   events: {
-    // click: function (evt) { }
   }
 })
 

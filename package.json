@@ -28,6 +28,7 @@
     "vue": "^3.0.0",
     "vue-aframe": "^0.0.0",
     "vue-router": "^4.0.0-0",
+    "vue3-carousel": "^0.3.3",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  // font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -31,5 +31,6 @@
 body {
   width: 100%;
   margin: 0px;
+  font-family: 'Montserrat', sans-serif;
 }
 </style>

@@ -35,7 +35,6 @@ import Assets from '../entities/basic/Assets.vue'
 import Camera from '../entities/utils/Camera.vue'
 import SavePosePanel from '../entities/custom/SavePosePanel.vue'
 import Tatami from '../entities/custom/Tatami.vue'
-import Keyboard from '../entities/custom/Keyboard.vue'
 import localTexture from '@/assets/Tiles_051_4K_basecolor.png'
 import { ref, onMounted, computed } from 'vue'
 
@@ -53,7 +52,6 @@ export default {
     Camera,
     SavePosePanel,
     Tatami,
-    Keyboard
   },
   setup(props, { emit }) {
     const items = ref([])

@@ -27,15 +27,15 @@
 
 <script setup>
 // import { ref } from 'vue'
-import Entity from '../entities/Entity.vue'
-import Box from '../entities/basic/Box.vue'
-import Scene from '../scenarios/basic/Scene.vue'
-import Sky from '../entities/basic/Sky.vue'
-import Grid from '../entities/basic/Grid.vue'
-import Camera from '../entities/utils/Camera.vue'
-import ControlPanel from '../entities/custom/ControlPanel.vue'
-import SavePosePanel from '../entities/custom/SavePosePanel.vue'
-import Tatami from '../entities/custom/Tatami.vue'
+import Entity from '../../entities/Entity.vue'
+import Box from '../../entities/basic/Box.vue'
+import Scene from '../basic/Scene.vue'
+import Sky from '../../entities/basic/Sky.vue'
+import Grid from '../../entities/basic/Grid.vue'
+import Camera from '../../entities/utils/Camera.vue'
+import ControlPanel from '../../entities/custom/ControlPanel.vue'
+import SavePosePanel from '../../entities/custom/SavePosePanel.vue'
+import Tatami from '../../entities/custom/Tatami.vue'
 import { ref, onMounted, computed } from 'vue'
 
 const count = ref(0)

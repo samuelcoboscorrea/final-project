@@ -32,7 +32,7 @@
         </Slide>
         <Slide v-for="route in routerRoutes" :key="route.path">
           <div class="card">
-            <img src="https://via.placeholder.com/300"  />
+            <img :src="route.meta.image" />
             <router-link :to="route.path">
               <div class="card-content">
                 <h2>{{ route.name }}</h2>

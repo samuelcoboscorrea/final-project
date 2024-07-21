@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import SimpleScenario from '@/components/aframe/scenarios/other/SimpleScenario.vue'
+import SimpleScenario from '@/components/aframe/scenarios/SimpleScenario.vue'
 import SimpleColliderScenario from '@/components/aframe/scenarios/other/SimpleColliderScenario.vue'
 </script>
 

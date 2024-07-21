@@ -17,13 +17,14 @@
     </section>
     
     <section class="cards-carousel">
+      <h2>Escenas</h2>
+
       <Carousel :items-to-show="2.5" :wrap-around="true">
         <Slide v-for="route in routerRoutes" :key="route.path">
           <div class="card">
             <img :src="route.meta.image" />
             <router-link :to="route.path">
               <div class="card-content">
-                <h2>{{ route.name }}</h2>
                 <p>{{ route.meta.description }}</p>
               </div>
             </router-link>
@@ -38,15 +39,48 @@
 
     <!-- Nueva Sección con Fondo Diferente -->
     <section class="bottom-section">
-      <h2>Sección Inferior</h2>
-      <p>Esta es otra sección de la página con un fondo diferente.</p>
+      <h2>Videos demostrativos</h2>
+      
+      <div class="video-section">
+        <div class="video-container">
+          <video style="width: 100%" controls>
+            <source :src="panelControlVideo" type="video/mp4">
+          </video>
+        </div>
+        
+        <div class="video-container">
+          <video style="width: 100%" controls>
+            <source :src="poseVideo" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      
+    </section>
+
+    <section class="resources-section">
+      <h2>Recursos del TFG</h2>
+  
+      <div class="resource-card">
+        <h3>Memoria del TFG</h3>
+        <a href="Memoria trabajo fin de grado.pdf" target="_blank">Ver Memoria</a>
+      </div>
+  
+      <div class="resource-card">
+        <h3>Presentación</h3>
+        <a href="Presentación trabajo fin de grado.pdf" target="_blank">Ver Diapositivas</a>
+      </div>
+  
+      <div class="resource-card">
+        <h3>Código Fuente</h3>
+        <a href="https://github.com/samuelcoboscorrea/final-project" target="_blank">Ver Código</a>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
       <div class="social-icons">
-        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:example@example.com">Email</a>
+        <a href="https://www.linkedin.com/in/samuel-cobos-correa-370baa28b/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:samuelcoboscorrea@gmail.com">Email</a>
         <!-- Agrega más enlaces según sea necesario -->
       </div>
     </footer>
@@ -59,6 +93,8 @@ import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import logo from '@/assets/Logo_URJC.png'
 import { useRouter } from 'vue-router'
+import panelControlVideo from '@/assets/videos/panel-control-scenario.mp4'
+import poseVideo from '@/assets/videos/pose-scenario.mp4'
 
 export default {
   name: "Home",
@@ -96,7 +132,7 @@ export default {
     ]);
 
     return {
-      cards, logo, routerRoutes
+      cards, logo, routerRoutes, panelControlVideo, poseVideo
     };
   }
 };
@@ -155,6 +191,10 @@ export default {
   }
 
    .cards-carousel {
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
     background-color: #fff;
     padding: 2rem 0;
 
@@ -225,6 +265,72 @@ export default {
     }
   }
 }
+
+.video-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.video-container {
+  width: 400px;
+  height: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resources-section {
+  padding: 20px;
+  padding-bottom: 60px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 40px;
+
+  h2 {
+    width: 100%;
+    text-align: center;
+  }
+
+  .resource-card {
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+
+      &:hover {
+        color: #007BFF;
+      }
+    }
+  }
+}
+
 
 /* animations */
 

@@ -12,7 +12,7 @@
           <Camera/>
         </Entity>
         
-        <Grid id="grid" :aprops="gridProps">
+        <Grid id="grid" material="src: #localTexture" :aprops="gridProps">
           <Tatami :items="items"/>
         </Grid>
         
@@ -112,6 +112,8 @@ export default {
         src: '#localTexture'
       }
     });
+
+    console.log(gridProps)
 
     const skyProps = ref({
       material: {

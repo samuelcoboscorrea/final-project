@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <!-- Nueva Sección Superior -->
 
-    <!-- Cabecera Principal -->
     <!-- <header class="main-header">
       <h1>Mi Página Web</h1>
     </header> -->
@@ -17,19 +15,9 @@
       <div id='stars2'></div>
       <div id='stars3'></div>
     </section>
-
-    <!-- Sección de Tarjetas como Carrusel -->
+    
     <section class="cards-carousel">
       <Carousel :items-to-show="2.5" :wrap-around="true">
-        <Slide v-for="(card, index) in cards" :key="index">
-          <div class="card">
-            <img :src="card.image" :alt="card.title" />
-            <div class="card-content">
-              <h2>{{ card.title }}</h2>
-              <p>{{ card.text }}</p>
-            </div>
-          </div>
-        </Slide>
         <Slide v-for="route in routerRoutes" :key="route.path">
           <div class="card">
             <img :src="route.meta.image" />
@@ -179,6 +167,7 @@ export default {
       overflow: hidden;
       width: 90%;
       text-align: center;
+      max-width: 300px;
 
       img {
         max-width: 100%;

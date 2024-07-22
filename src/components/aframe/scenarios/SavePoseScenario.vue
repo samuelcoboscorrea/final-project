@@ -109,7 +109,7 @@ export default {
     /* SIMPLE OBJECTS PROPERTIES */
     const gridProps = ref({
       material: {
-        src: "url(/img/Tiles_051_4K_basecolor.png)"
+        src: localTexture
       }
     });
 

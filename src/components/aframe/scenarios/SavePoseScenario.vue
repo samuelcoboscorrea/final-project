@@ -12,7 +12,7 @@
           <Camera/>
         </Entity>
         
-        <Grid id="grid" material="src: #localTexture" :aprops="gridProps">
+        <Grid id="grid" :aprops="gridProps">
           <Tatami :items="items"/>
         </Grid>
         
@@ -109,7 +109,7 @@ export default {
     /* SIMPLE OBJECTS PROPERTIES */
     const gridProps = ref({
       material: {
-        src: '#localTexture'
+        src: "url(/img/Tiles_051_4K_basecolor.png)"
       }
     });
 
